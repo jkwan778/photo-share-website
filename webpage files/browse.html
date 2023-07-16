@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% if message %}
+  <h4>{{message}}!</h4>
+{% endif %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Photos</title>
+</head>
+<body>
+    <h1>Browse Photos</h1>
+    <form method="post" action="{{ url_for('globalPhotoSearch') }}">
+            <label for="photo_search">Search all photos:</label>
+            <input type="photo_search" name="photo_search" required="true" /> <br/>
+            <input type="submit" />
+    </form>
+
+    <h3>Top Tags</h3>
+    <ol>
+        {% for tag in popular %}
+            <li>{{tag[0]}}</li>
+        {% endfor %}
+    </ol>
+
+    <form method="post" action="{{ url_for('globalTagSearch') }}">
+            <label for="tag_search">View photos by tag:</label>
+            <input type="tag_search" name="tag_search" required="true" /> <br/>
+            <input type="submit" />
+    </form>
+
+    <form method="post" action="{{ url_for('globalCommentSearch') }}">
+            <label for="comment_search">View all comments:</label>
+            <input type="comment_search" name="comment_search" required="true" /> <br/>
+            <input type="submit" />
+    </form>
+        {% if not t_search and not p_search %}
+        <h3>Recommended Photos</h3>
+        <ul style="list-style: none;">
+            {% for photo in contents %}
+            <li>
+            <img src='data:image/jpg;base64, {{ photo[0] }}'/> <br>
+                {{photo[2]}}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if t_search %}
+        <h2>Showing photos with {{current}} tag</h2>
+        <ul style="list-style: none;">
+            {% for photo in contents %}
+            <li>
+            <img src='data:image/jpg;base64, {{ photo[0] }}'/> <br>
+                {{photo[1]}}<br>
+                <p>{{photo[3]}} likes </p>
+                <p>Liked By: {{photo[4]}}</p>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <h3>Leave a comment</h3>
+        <form method="post" action="{{ url_for('comm_photos') }}">
+            <label for="photo_id">Leave comment on photo</label>
+            <select name="photo_id">
+                {% for p in p_list %}
+                <option value={{p[1]}}>
+                    {{p[2]}}
+                </option>
+                {% endfor %}
+            </select>
+            <input name="comment" required="true"/>
+            <input type="submit" />
+        </form>
+
+        <h3>Leave a Like</h3>
+        <form method="post" action="{{ url_for('like_photos') }}">
+            <label for="photo_id2">Leave a like on photo</label>
+            <select name="photo_id2">
+                {% for p in p_list %}
+                <option value={{p[1]}}>
+                    {{p[2]}}
+                </option>
+                {% endfor %}
+            </select>
+            <input type="submit" />
+        </form>
+        {% endif %}
+
+        {% if p_search %}
+        <h2>Showing photos with {{current}}</h2>
+        <ul>
+            {% for photo in contents %}
+            <li>
+            <img src='data:image/jpg;base64, {{ photo[0] }}'/> <br>
+                {{photo[1]}}<br>
+                <p>{{photo[3]}} likes </p>
+                <p>Liked By: {{photo[4]}}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+
+</body>
+<a href='/'>Home</a>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% if message %}
+  <h4>{{message}}!</h4>
+{% endif %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>View Photos</title>
+</head>
+<body>
+    <a href="gallery.html"><h1>View your Photos</h1></a>
+    <h3>Your Albums</h3>
+
+    <div id="form">
+        <p>
+        {% for a in user_albums %}
+        <ul>
+            <li>{{a}}</li>
+        </ul>
+        {% endfor %}
+        </p>
+        <form method="post" action="{{ url_for('show_photos') }}">
+            <label for="album">View photos by Album:</label>
+            <input type="album" name="album" required="true" /> <br/>
+            <input type="submit" />
+        </form>
+        <form method="post" action="{{ url_for('tagSearch') }}">
+            <label for="tag_search">View your photos by tag:</label>
+            <input type="tag_search" name="tag_search" required="true" /> <br/>
+            <input type="submit" />
+        </form>
+    </div>
+
+    <form method="post" action="{{ url_for('del_album') }}">
+            <label for="del_album">Delete an Album:</label>
+            <select name="del_album">
+                {% for album in a_tuple %}
+                <option value={{album[0]}}>
+                    {{album[1]}}
+                </option>
+                {% endfor %}}
+            </select>
+            <input type="submit" />
+    </form>
+
+    {% if opened == 'True' %}
+    <h2>{{current}}</h2>
+        <ul>
+            {% for photo in contents %}
+            <li>{{photo[2]}} <br>
+            <img src='data:image/jpg;base64, {{ photo[0] }}'/> <br>
+                {{photo[1]}}
+            </li>
+            {% endfor %}
+        </ul>
+
+    <div id="tagging">
+        <h3>Assign Tags</h3>
+        <form method="post" action="{{ url_for('assign_tags') }}">
+            <label for="p_select">Select photo to tag</label>
+            <select name="p_select">
+                {% for t in tuple %}
+                <option value={{t[1]}}>
+                    {{t[2]}}
+                </option>
+                {% endfor %}
+            </select><br>
+            <label for="tag">Tag</label>
+            <input name="tag" required="true"/> <br>
+            <input type="submit">
+        </form>
+    </div>
+
+    <div id="delete">
+        <h5>Delete a photo</h5>
+        <form method="post" action="{{ url_for('del_photos') }}">
+            <label for="del">Delete a photo</label>
+            <select name="del">
+                {% for t in tuple %}
+                <option value={{t[1]}}>
+                    {{t[2]}}
+                </option>
+                {% endfor %}
+            </select>
+            <input type="submit" />
+        </form>
+
+        </div>
+
+    {% endif %}
+
+    {% if tag_search == 'True' %}
+    <h2>{{current}}</h2>
+    <ul>
+            {% for photo in contents %}
+            <li>
+            <img src='data:image/jpg;base64, {{ photo[0] }}'/> <br>
+                {{photo[1]}}
+            </li>
+            {% endfor %}
+    </ul>
+    {% endif %}
+    <a href='/'>Home</a>
+    </body>
+    </html>

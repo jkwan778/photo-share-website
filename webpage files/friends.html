@@ -1,0 +1,44 @@
+
+
+<head>
+    <title>Add a friend</title>
+</head>
+
+<body>
+	<div class="heading">
+        <h1>Friends</h1>
+        <h4>{{message}}</h4>
+    </div>
+        <div id="content">
+            <form method="post" action="{{ url_for('add_friends') }}">
+                <label for="friend_email">Enter friend email to add:</label>
+                <input type="friend_email" name="friend_email" /><br />
+                <input type="submit" />
+            </form>
+         </div>
+
+        <div id="f_list">
+            <h3>
+                Here are your friends
+            </h3>
+            <p>
+                {% for f in friends %}
+                <ul>
+                    <li>{{f}}</li>
+                </ul>
+                {% endfor %}
+            </p>
+        </div>
+
+        <h3>Recommended Friends</h3>
+        <p>
+            {% for r in recommended %}
+            <ul>
+                <li>{{r[3]}}</li>
+            </ul>
+            {% endfor %}
+        </p>
+
+
+        <a href='/'>Home</a>
+</body>
